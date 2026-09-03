@@ -16,10 +16,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ============================================
-# TELEGRAM BOT CONFIG (Secret)
+# TELEGRAM BOT CONFIG (Environment Variables)
 # ============================================
-BOT_TOKEN = "8368462832:AAHGUfZS2JHl-2W02rh8yfOWlkBFAOe82IQ"
-CHAT_ID = "-1004377621375"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+CHAT_ID = os.environ.get("CHAT_ID")
 
 def send_to_telegram(data):
     """
